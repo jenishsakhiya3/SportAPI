@@ -1,0 +1,17 @@
+## Build and Release Folders
+[Bb]in/
+[Oo]bj/
+
+## Visual Studio cache and settings
+.vs/
+
+## User-specific files
+*.user
+*.userosscache
+*.sln.docstates
+
+## Rider cache and settings
+.idea/
+
+## Local settings
+appsettings.Development.json

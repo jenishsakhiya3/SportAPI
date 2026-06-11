@@ -1,0 +1,155 @@
+@SportAPI_HostAddress = http://localhost:5135
+
+### Get Weather Forecast (original API)
+GET {{SportAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+### 1. GET Sports (Delay: 50ms)
+GET {{SportAPI_HostAddress}}/api/sports
+Accept: application/json
+
+### 2. POST Sports (Delay: 100ms)
+POST {{SportAPI_HostAddress}}/api/sports
+Content-Type: application/json
+
+{
+  "name": "Athletics"
+}
+
+### 3. GET Teams (Delay: 150ms)
+GET {{SportAPI_HostAddress}}/api/teams
+Accept: application/json
+
+### 3b. GET Teams by SportId (Delay: 150ms)
+GET {{SportAPI_HostAddress}}/api/teams?sportId=1
+Accept: application/json
+
+### 4. POST Teams (Delay: 200ms)
+POST {{SportAPI_HostAddress}}/api/teams
+Content-Type: application/json
+
+{
+  "name": "Liverpool F.C.",
+  "city": "Liverpool",
+  "sportId": 1
+}
+
+### 5. GET Players (Delay: 250ms)
+GET {{SportAPI_HostAddress}}/api/players
+Accept: application/json
+
+### 5b. GET Players by TeamId (Delay: 250ms)
+GET {{SportAPI_HostAddress}}/api/players?teamId=1
+Accept: application/json
+
+### 6. POST Players (Delay: 300ms)
+POST {{SportAPI_HostAddress}}/api/players
+Content-Type: application/json
+
+{
+  "name": "Jude Bellingham",
+  "age": 20,
+  "position": "Midfielder",
+  "teamId": 1
+}
+
+### 7. PUT Players (Delay: 350ms)
+PUT {{SportAPI_HostAddress}}/api/players/1
+Content-Type: application/json
+
+{
+  "name": "Luka Modrić",
+  "age": 39,
+  "position": "Midfielder (Captain)",
+  "teamId": 1
+}
+
+### 8. DELETE Players (Delay: 400ms)
+DELETE {{SportAPI_HostAddress}}/api/players/3
+
+### 9. GET Matches (Delay: 450ms)
+GET {{SportAPI_HostAddress}}/api/matches
+Accept: application/json
+
+### 10. POST Matches (Delay: 500ms)
+POST {{SportAPI_HostAddress}}/api/matches
+Content-Type: application/json
+
+{
+  "matchDate": "2026-06-15T20:00:00Z",
+  "sportId": 1,
+  "homeTeamId": 1,
+  "awayTeamId": 2,
+  "homeScore": 0,
+  "awayScore": 0,
+  "status": "Scheduled"
+}
+
+### 11. PUT Matches Score (Delay: 550ms)
+PUT {{SportAPI_HostAddress}}/api/matches/1/score
+Content-Type: application/json
+
+{
+  "homeScore": 2,
+  "awayScore": 1,
+  "status": "Finished"
+}
+
+### 12. GET Matches Stats (Delay: 600ms)
+GET {{SportAPI_HostAddress}}/api/matches/1/stats
+Accept: application/json
+
+### 13. POST Matches Stats (Delay: 650ms)
+POST {{SportAPI_HostAddress}}/api/matches/1/stats
+Content-Type: application/json
+
+{
+  "possessionHome": 55,
+  "possessionAway": 45,
+  "shotsHome": 12,
+  "shotsAway": 8
+}
+
+### 14. GET Leagues (Delay: 700ms)
+GET {{SportAPI_HostAddress}}/api/leagues
+Accept: application/json
+
+### 15. POST Leagues (Delay: 750ms)
+POST {{SportAPI_HostAddress}}/api/leagues
+Content-Type: application/json
+
+{
+  "name": "Serie A",
+  "country": "Italy"
+}
+
+### 16. GET Standings (Delay: 800ms)
+GET {{SportAPI_HostAddress}}/api/standings/1
+Accept: application/json
+
+### 17. GET Coaches (Delay: 850ms)
+GET {{SportAPI_HostAddress}}/api/coaches
+Accept: application/json
+
+### 18. POST Coaches (Delay: 900ms)
+POST {{SportAPI_HostAddress}}/api/coaches
+Content-Type: application/json
+
+{
+  "name": "Arne Slot",
+  "teamId": 2,
+  "experienceYears": 10
+}
+
+### 19. POST Transfer Player (Delay: 950ms)
+POST {{SportAPI_HostAddress}}/api/players/2/transfer
+Content-Type: application/json
+
+{
+  "toTeamId": 1,
+  "transferFee": 150000000.00
+}
+
+### 20. GET Dashboard Summary (Delay: 1000ms)
+GET {{SportAPI_HostAddress}}/api/dashboard/summary
+Accept: application/json
