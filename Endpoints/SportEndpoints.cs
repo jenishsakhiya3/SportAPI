@@ -249,6 +249,32 @@ public static class SportEndpoints
                 MatchesCount = matchesCount
             });
         }).WithName("GetDashboardSummary");
+
+        // 21. GET /api/diagnostics/cpu-stress (Stresses CPU to trigger Autoscale)
+        api.MapGet("/diagnostics/cpu-stress", (int? seconds) =>
+        {
+            var secs = seconds ?? 30;
+            var endTime = DateTime.UtcNow.AddSeconds(secs);
+            var processorCount = Environment.ProcessorCount;
+
+            for (int i = 0; i < processorCount; i++)
+            {
+                _ = Task.Run(() =>
+                {
+                    while (DateTime.UtcNow < endTime)
+                    {
+                        // Spin CPU core
+                        _ = Math.Sqrt(Random.Shared.NextDouble());
+                    }
+                });
+            }
+
+            return Results.Ok(new
+            {
+                Message = $"Stressing {processorCount} CPU cores at 100% load for {secs} seconds.",
+                TargetTimeUtc = endTime
+            });
+        }).WithName("CpuStress");
     }
 }
 

@@ -153,3 +153,8 @@ Content-Type: application/json
 ### 20. GET Dashboard Summary (Delay: 1000ms)
 GET {{SportAPI_HostAddress}}/api/dashboard/summary
 Accept: application/json
+
+### 21. GET CPU Stress (Diagnostics helper to trigger Azure autoscale)
+GET {{SportAPI_HostAddress}}/api/diagnostics/cpu-stress?seconds=60
+Accept: application/json
+
