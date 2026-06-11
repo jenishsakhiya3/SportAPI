@@ -14,14 +14,14 @@ public static class SportEndpoints
         // 1. GET /api/sports (Delay: 50ms)
         api.MapGet("/sports", async (SportDbContext db) =>
         {
-            await Task.Delay(50);
+            await Task.Delay(5000);
             return Results.Ok(await db.Sports.ToListAsync());
         }).WithName("GetSports");
 
         // 2. POST /api/sports (Delay: 100ms)
         api.MapPost("/sports", async (SportDbContext db, Sport sport) =>
         {
-            await Task.Delay(100);
+            await Task.Delay(1000);
             db.Sports.Add(sport);
             await db.SaveChangesAsync();
             return Results.Created($"/api/sports/{sport.Id}", sport);
@@ -30,7 +30,7 @@ public static class SportEndpoints
         // 3. GET /api/teams (Delay: 150ms)
         api.MapGet("/teams", async (SportDbContext db, int? sportId) =>
         {
-            await Task.Delay(150);
+            await Task.Delay(1500);
             var query = db.Teams.AsQueryable();
             if (sportId.HasValue)
             {
@@ -42,7 +42,7 @@ public static class SportEndpoints
         // 4. POST /api/teams (Delay: 200ms)
         api.MapPost("/teams", async (SportDbContext db, Team team) =>
         {
-            await Task.Delay(200);
+            await Task.Delay(2000);
             db.Teams.Add(team);
             await db.SaveChangesAsync();
             return Results.Created($"/api/teams/{team.Id}", team);
@@ -51,7 +51,7 @@ public static class SportEndpoints
         // 5. GET /api/players (Delay: 250ms)
         api.MapGet("/players", async (SportDbContext db, int? teamId) =>
         {
-            await Task.Delay(250);
+            await Task.Delay(2500);
             var query = db.Players.AsQueryable();
             if (teamId.HasValue)
             {
@@ -63,7 +63,7 @@ public static class SportEndpoints
         // 6. POST /api/players (Delay: 300ms)
         api.MapPost("/players", async (SportDbContext db, Player player) =>
         {
-            await Task.Delay(300);
+            await Task.Delay(3000);
             db.Players.Add(player);
             await db.SaveChangesAsync();
             return Results.Created($"/api/players/{player.Id}", player);
@@ -72,7 +72,7 @@ public static class SportEndpoints
         // 7. PUT /api/players/{id} (Delay: 350ms)
         api.MapPut("/players/{id:int}", async (SportDbContext db, int id, Player playerInput) =>
         {
-            await Task.Delay(350);
+            await Task.Delay(3500);
             var player = await db.Players.FindAsync(id);
             if (player == null) return Results.NotFound();
 
@@ -88,7 +88,7 @@ public static class SportEndpoints
         // 8. DELETE /api/players/{id} (Delay: 400ms)
         api.MapDelete("/players/{id:int}", async (SportDbContext db, int id) =>
         {
-            await Task.Delay(400);
+            await Task.Delay(4000);
             var player = await db.Players.FindAsync(id);
             if (player == null) return Results.NotFound();
 
@@ -100,7 +100,7 @@ public static class SportEndpoints
         // 9. GET /api/matches (Delay: 450ms)
         api.MapGet("/matches", async (SportDbContext db) =>
         {
-            await Task.Delay(450);
+            await Task.Delay(4500);
             return Results.Ok(await db.Matches.ToListAsync());
         }).WithName("GetMatches");
 
@@ -116,7 +116,7 @@ public static class SportEndpoints
         // 11. PUT /api/matches/{id}/score (Delay: 550ms)
         api.MapPut("/matches/{id:int}/score", async (SportDbContext db, int id, MatchScoreUpdate scoreUpdate) =>
         {
-            await Task.Delay(550);
+            await Task.Delay(5500);
             var match = await db.Matches.FindAsync(id);
             if (match == null) return Results.NotFound();
 
@@ -131,7 +131,7 @@ public static class SportEndpoints
         // 12. GET /api/matches/{id}/stats (Delay: 600ms)
         api.MapGet("/matches/{id:int}/stats", async (SportDbContext db, int id) =>
         {
-            await Task.Delay(600);
+            await Task.Delay(6000);
             var stats = await db.MatchStats.FirstOrDefaultAsync(s => s.MatchId == id);
             if (stats == null) return Results.NotFound();
             return Results.Ok(stats);
@@ -140,7 +140,7 @@ public static class SportEndpoints
         // 13. POST /api/matches/{id}/stats (Delay: 650ms)
         api.MapPost("/matches/{id:int}/stats", async (SportDbContext db, int id, MatchStat statInput) =>
         {
-            await Task.Delay(650);
+            await Task.Delay(6500);
             var matchExists = await db.Matches.AnyAsync(m => m.Id == id);
             if (!matchExists) return Results.NotFound("Match not found");
 
@@ -172,7 +172,7 @@ public static class SportEndpoints
         // 15. POST /api/leagues (Delay: 750ms)
         api.MapPost("/leagues", async (SportDbContext db, League league) =>
         {
-            await Task.Delay(750);
+            await Task.Delay(7500);
             db.Leagues.Add(league);
             await db.SaveChangesAsync();
             return Results.Created($"/api/leagues/{league.Id}", league);
@@ -181,7 +181,7 @@ public static class SportEndpoints
         // 16. GET /api/standings/{leagueId} (Delay: 800ms)
         api.MapGet("/standings/{leagueId:int}", async (SportDbContext db, int leagueId) =>
         {
-            await Task.Delay(800);
+            await Task.Delay(8000);
             var standings = await db.Standings
                 .Where(s => s.LeagueId == leagueId)
                 .OrderByDescending(s => s.Points)
@@ -192,7 +192,7 @@ public static class SportEndpoints
         // 17. GET /api/coaches (Delay: 850ms)
         api.MapGet("/coaches", async (SportDbContext db) =>
         {
-            await Task.Delay(850);
+            await Task.Delay(8050);
             return Results.Ok(await db.Coaches.ToListAsync());
         }).WithName("GetCoaches");
 
@@ -208,7 +208,7 @@ public static class SportEndpoints
         // 19. POST /api/players/{id}/transfer (Delay: 950ms)
         api.MapPost("/players/{id:int}/transfer", async (SportDbContext db, int id, TransferRequest transferReq) =>
         {
-            await Task.Delay(950);
+            await Task.Delay(9500);
             var player = await db.Players.FindAsync(id);
             if (player == null) return Results.NotFound("Player not found");
 
@@ -235,7 +235,7 @@ public static class SportEndpoints
         // 20. GET /api/dashboard/summary (Delay: 1000ms)
         api.MapGet("/dashboard/summary", async (SportDbContext db) =>
         {
-            await Task.Delay(1000);
+            await Task.Delay(10000);
             var sportsCount = await db.Sports.CountAsync();
             var teamsCount = await db.Teams.CountAsync();
             var playersCount = await db.Players.CountAsync();
