@@ -250,6 +250,33 @@ public static class SportEndpoints
             });
         }).WithName("GetDashboardSummary");
 
+        // 20b. GET /api/diagnostics/db-check (Tests database connection and queries table)
+        api.MapGet("/diagnostics/db-check", async (SportDbContext db) =>
+        {
+            try
+            {
+                var canConnect = await db.Database.CanConnectAsync();
+                if (!canConnect)
+                {
+                    return Results.Ok(new { Success = false, Message = "Connection test failed. The database is unreachable." });
+                }
+
+                // Query Sports table to verify schema exists
+                var sportsCount = await db.Sports.CountAsync();
+                return Results.Ok(new { Success = true, Message = "Connection and query successful!", SportsCount = sportsCount });
+            }
+            catch (Exception ex)
+            {
+                return Results.Json(new
+                {
+                    Success = false,
+                    ErrorType = ex.GetType().Name,
+                    Message = ex.Message,
+                    Details = ex.ToString()
+                }, statusCode: 500);
+            }
+        }).WithName("DbCheck");
+
         // 21. GET /api/diagnostics/cpu-stress (Stresses CPU to trigger Autoscale)
         api.MapGet("/diagnostics/cpu-stress", (int? seconds) =>
         {
