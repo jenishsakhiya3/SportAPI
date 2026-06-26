@@ -197,7 +197,7 @@ public static class SportEndpoints
         }).WithName("GetCoaches");
 
         // 18. POST /api/coaches (Delay: 900ms)
-        api.MapPost("/coaches", async (SportDbContext db, Coach coach) =>
+        api.MapPost("/coaches", async (SportDbContext db, Coach coach ) =>
         {
             await Task.Delay(900);
             db.Coaches.Add(coach);
