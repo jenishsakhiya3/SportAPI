@@ -1,3 +1,4 @@
+using Azure.Storage.Blobs;
 using SportAPI.Data;
 using SportAPI.Endpoints;
 
@@ -21,6 +22,8 @@ builder.Services.AddCors(options =>
               .WithExposedHeaders("X-Instance-Id"); // Expose custom instance headers
     });
 });
+
+builder.Services.AddSingleton(x => new BlobServiceClient(builder.Configuration.GetConnectionString("AzureStorage")));
 
 // Register the DbContext via extension method
 builder.Services.AddSportDatabase(builder.Configuration);

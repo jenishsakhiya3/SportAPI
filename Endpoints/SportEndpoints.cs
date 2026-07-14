@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SportAPI.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Azure.Storage.Blobs;
 
 namespace SportAPI.Endpoints;
 
@@ -302,6 +303,42 @@ public static class SportEndpoints
                 TargetTimeUtc = endTime
             });
         }).WithName("CpuStress");
+
+        api.MapGet("/storage/check/{containerName}", async (string containerName, BlobServiceClient blobServiceClient) =>
+        {
+            try
+            {
+                // 1. Get a reference to the container
+                var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+
+                // 2. Check if it exists and is accessible using the current credentials
+                bool exists = await containerClient.ExistsAsync();
+
+                if (exists)
+                {
+                    return Results.Ok(new 
+                    { 
+                        IsAccessible = true, 
+                        Message = $"Successfully accessed container: {containerName}" 
+                    });
+                }
+
+                return Results.NotFound(new 
+                { 
+                    IsAccessible = false, 
+                    Message = $"Container '{containerName}' does not exist or is not accessible." 
+                });
+            }
+            catch (Exception ex)
+            {
+                // Catch authentication, network, or permission errors
+                return Results.Problem(
+                    detail: ex.Message, 
+                    statusCode: 503, // Service Unavailable
+                    title: "Azure Blob Storage Connection Failed"
+                );
+            }
+        }).WithName("CheckStorageAccess");
     }
 }
 
