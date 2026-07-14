@@ -3,6 +3,7 @@ using SportAPI.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Azure.Storage.Blobs;
+using System.Diagnostics;
 
 namespace SportAPI.Endpoints;
 
