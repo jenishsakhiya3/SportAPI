@@ -1,15 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: temp
-  namespace: sample-app-namespace-1785499544447
+  name: temp-deploy
+  namespace: sample-app-namespace-1785563152438
   labels:
-    app.kubernetes.io/name: temp
+    app.kubernetes.io/name: temp-deploy
     kubernetes.azure.com/generator: devhub
 spec:
   type: LoadBalancer
   selector:
-    app.kubernetes.io/name: temp
+    app.kubernetes.io/name: temp-deploy
   ports:
     - protocol: TCP
       port: 8080
