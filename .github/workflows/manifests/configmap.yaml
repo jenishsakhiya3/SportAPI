@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: temp-deploy-config
-  namespace: sample-app-namespace-1785563152438
+  name: temp-config
+  namespace: namespace-workflow-1785571507157
   labels:
-    app.kubernetes.io/name: temp-deploy
+    app.kubernetes.io/name: temp
     kubernetes.azure.com/generator: devhub
 data:

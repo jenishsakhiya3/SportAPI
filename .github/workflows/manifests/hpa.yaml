@@ -1,16 +1,16 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: temp-deploy
+  name: temp
   labels:
-    app.kubernetes.io/name: temp-deploy
-    app.kubernetes.io/part-of: temp-deploy-project
+    app.kubernetes.io/name: temp
+    app.kubernetes.io/part-of: temp-project
     kubernetes.azure.com/generator: devhub
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: temp-deploy
+    name: temp
   minReplicas: 1
   maxReplicas: 5
   metrics:
