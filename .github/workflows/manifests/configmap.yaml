@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: jenish-config
-  namespace: sample-app-namespace-1785590340050
+  name: hiiiii-config
+  namespace: namespace-workflow-1785592215351
   labels:
-    app.kubernetes.io/name: jenish
+    app.kubernetes.io/name: hiiiii
     kubernetes.azure.com/generator: devhub
 data:

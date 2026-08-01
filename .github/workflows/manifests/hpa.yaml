@@ -1,16 +1,16 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: jenish
+  name: hiiiii
   labels:
-    app.kubernetes.io/name: jenish
-    app.kubernetes.io/part-of: jenish-project
+    app.kubernetes.io/name: hiiiii
+    app.kubernetes.io/part-of: hiiiii-project
     kubernetes.azure.com/generator: devhub
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: jenish
+    name: hiiiii
   minReplicas: 1
   maxReplicas: 5
   metrics:
