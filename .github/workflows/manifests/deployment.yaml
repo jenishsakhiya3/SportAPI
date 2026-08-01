@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: temp
-          image: ContaainerRegistry.azurecr.io/image-workflow-1785606481651:latest
+          image: ContaainerRegistry.azurecr.io/image-workflow-1785606481651:image
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
