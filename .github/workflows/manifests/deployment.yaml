@@ -16,6 +16,11 @@ spec:
       labels:
         app.kubernetes.io/name: temp
     spec:
+      tolerations:
+        - key: "CriticalAddonsOnly"
+          operator: "Equal"
+          value: "true"
+          effect: "NoSchedule"
       containers:
         - name: temp
           image: ContaainerRegistry.azurecr.io/image-workflow-1785606481651:image
