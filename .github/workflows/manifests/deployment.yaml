@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jenish
+  name: hiiiii
   labels:
-    app.kubernetes.io/name: jenish
+    app.kubernetes.io/name: hiiiii
     kubernetes.azure.com/generator: devhub
-  namespace: sample-app-namespace-1785590340050
+  namespace: namespace-workflow-1785592215351
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app.kubernetes.io/name: jenish
+      app.kubernetes.io/name: hiiiii
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: jenish
+        app.kubernetes.io/name: hiiiii
     spec:
       containers:
-        - name: jenish
-          image: containerregistrytemp.azurecr.io/image-workflow-1785590340037:latest
+        - name: hiiiii
+          image: containerregistrytemp.azurecr.io/image-workflow-1785592215351:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -31,7 +31,7 @@ spec:
               memory: "1Gi"
           envFrom:
             - configMapRef:
-                name: jenish-config
+                name: hiiiii-config
             - secretRef:
                 name: secret-ref
                 optional: true
@@ -83,11 +83,11 @@ spec:
               topologyKey: kubernetes.io/hostname
               labelSelector:
                 matchLabels:
-                  app.kubernetes.io/name: jenish
+                  app.kubernetes.io/name: hiiiii
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
           whenUnsatisfiable: ScheduleAnyway
           labelSelector:
             matchLabels:
-              app.kubernetes.io/name: jenish
+              app.kubernetes.io/name: hiiiii
