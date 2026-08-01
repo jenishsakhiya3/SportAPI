@@ -16,6 +16,19 @@ spec:
       labels:
         app.kubernetes.io/name: temp
     spec:
+      tolerations:
+        - key: "CriticalAddonsOnly"
+          operator: "Equal"
+          value: "true"
+          effect: "NoSchedule"
+        - key: "CriticalAddonsOnly"
+          operator: "Equal"
+          value: "true"
+          effect: "NoExecute"
+        - key: "kubernetes.azure.com/hostedvm"
+          operator: "Equal"
+          value: "true"
+          effect: "NoSchedule"
       containers:
         - name: temp
           image: containerregistrytemp.azurecr.io/image-workflow-1785584638371:latest
