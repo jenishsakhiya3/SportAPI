@@ -77,9 +77,9 @@ jobs:
 
       # Builds and pushes an image up to your Azure Container Registry
       - name: Build and push image to ACR
-      run: |
-        docker build -t containerregistrytemp.azurecr.io/sportapi:latest -f ./Dockerfile .
-        docker push containerregistrytemp.azurecr.io/sportapi:latest
+        run: |
+          docker build -t containerregistrytemp.azurecr.io/sportapi:latest -f ./Dockerfile .
+          docker push containerregistrytemp.azurecr.io/sportapi:latest
   deploy:
     permissions:
       actions: read
