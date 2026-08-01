@@ -76,9 +76,11 @@ jobs:
           az acr login -n ${{ env.AZURE_CONTAINER_REGISTRY }}
 
       # Builds and pushes an image up to your Azure Container Registry
-      - name: Build and push image to ACR
+      # Builds and pushes an image locally using Docker to bypass ACR Tasks restriction
+      - name: Build and push image to ACR using Docker
         run: |
-          az acr build --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.ACR_RESOURCE_GROUP }} -f ${{ env.DOCKER_FILE }} ${{ env.BUILD_CONTEXT_PATH }}
+          docker build -t ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }} -f ${{ env.DOCKER_FILE }} ${{ env.BUILD_CONTEXT_PATH }}
+          docker push ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }}
   deploy:
     permissions:
       actions: read
