@@ -5,7 +5,7 @@ metadata:
   labels:
     app.kubernetes.io/name: temp
     kubernetes.azure.com/generator: devhub
-  namespace: namespace-workflow-1785571507157
+  namespace: namespace-workflow-1785584638371
 spec:
   replicas: 2
   selector:
@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: temp
-          image: containerregistrytemp.azurecr.io/image-workflow-1785571507157:latest
+          image: containerregistrytemp.azurecr.io/image-workflow-1785584638371:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
