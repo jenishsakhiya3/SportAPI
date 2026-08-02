@@ -39,15 +39,15 @@ on:
 
 env:
   ACR_RESOURCE_GROUP: RGJenishSakhiya
-  AZURE_CONTAINER_REGISTRY: contaainerregistry
-  CONTAINER_NAME: image-workflow-1785606481651
+  AZURE_CONTAINER_REGISTRY: containerregistrytemp
+  CONTAINER_NAME: image-workflow-1785657833263
   CLUSTER_NAME: KuberCluster
   CLUSTER_RESOURCE_GROUP: RGJenishSakhiya
   CLUSTER_RESOURCE_TYPE: Microsoft.ContainerService/managedClusters
   DEPLOYMENT_MANIFEST_PATH: ./.github/workflows/manifests
   DOCKER_FILE: ./Dockerfile
   BUILD_CONTEXT_PATH: ./
-  NAMESPACE: sample-app-namespace-1785606481660
+  NAMESPACE: sample-app-namespace-1785657833285
   ENABLENAMESPACECREATION: false
   AUTH_TYPE: SERVICE_PRINCIPAL
 
@@ -70,19 +70,15 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           auth-type: ${{ env.AUTH_TYPE }}
 
-      # Log in to Azure Container Registry
-      - name: Log in to Azure Container Registry
-        uses: azure/docker-login@v1
-        with:
-          login-server: contaainerregistry.azurecr.io
-          username: ${{ secrets.ACR_USERNAME }}
-          password: ${{ secrets.ACR_PASSWORD }}
+      # Logs into ACR
+      - name: Log into ACR
+        run: |
+          az acr login -n ${{ env.AZURE_CONTAINER_REGISTRY }}
 
       # Builds and pushes an image up to your Azure Container Registry
       - name: Build and push image to ACR
         run: |
-          docker build -t contaainerregistry.azurecr.io/sportapi:latest -f ./Dockerfile .
-          docker push contaainerregistry.azurecr.io/sportapi:latest
+          az acr build --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.ACR_RESOURCE_GROUP }} -f ${{ env.DOCKER_FILE }} ${{ env.BUILD_CONTEXT_PATH }}
   deploy:
     permissions:
       actions: read
