@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: temp
-  namespace: sample-app-namespace-1785657833285
+  namespace: namespace-workflow-1785658615895
   labels:
     app.kubernetes.io/name: temp
     kubernetes.azure.com/generator: devhub
