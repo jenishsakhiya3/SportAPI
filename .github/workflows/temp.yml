@@ -80,8 +80,8 @@ jobs:
       # Logs into ACR
       - name: Build and push image to ACR
         run: |
-          docker build -t containerregistrytemp.azurecr.io/sportapi:latest -f ./Dockerfile .
-          docker push containerregistrytemp.azurecr.io/sportapi:latest
+          docker build -t containerregistrytemp.azurecr.io/image-workflow-1785658615895:${{ github.sha }} -f ./Dockerfile .
+          docker push containerregistrytemp.azurecr.io/image-workflow-1785658615895:${{ github.sha }}
   deploy:
     permissions:
       actions: read
