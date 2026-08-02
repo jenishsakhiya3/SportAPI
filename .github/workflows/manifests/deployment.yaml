@@ -5,7 +5,7 @@ metadata:
   labels:
     app.kubernetes.io/name: temp
     kubernetes.azure.com/generator: devhub
-  namespace: sample-app-namespace-1785606481660
+  namespace: sample-app-namespace-1785657833285
 spec:
   replicas: 2
   selector:
@@ -16,14 +16,9 @@ spec:
       labels:
         app.kubernetes.io/name: temp
     spec:
-      tolerations:
-        - key: "CriticalAddonsOnly"
-          operator: "Equal"
-          value: "true"
-          effect: "NoSchedule"
       containers:
         - name: temp
-          image: ContaainerRegistry.azurecr.io/image-workflow-1785606481651:image
+          image: ContainerRegistryTemp.azurecr.io/image-workflow-1785657833263:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -79,6 +74,7 @@ spec:
                 - NET_BIND_SERVICE
                 - SYS_CHROOT
                 - SETFCAP
+                - SYS_PTRACE
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
