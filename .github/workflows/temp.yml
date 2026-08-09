@@ -39,15 +39,16 @@ on:
 
 env:
   ACR_RESOURCE_GROUP: RGJenishSakhiya
-  AZURE_CONTAINER_REGISTRY: containerregistrytemp
-  CONTAINER_NAME: image-workflow-1785658615895
+  AZURE_CONTAINER_REGISTRY: kuberclusterregistry
+  CONTAINER_NAME: image-workflow-1786258416691
   CLUSTER_NAME: KuberCluster
-  CLUSTER_RESOURCE_GROUP: RGJenishSakhiya
+  CLUSTER_RESOURCE_GROUP: KuberCluster_group
   CLUSTER_RESOURCE_TYPE: Microsoft.ContainerService/managedClusters
-  DEPLOYMENT_MANIFEST_PATH: ./.github/workflows/manifests
+  DEPLOYMENT_MANIFEST_PATH: |
+    ./.github/workflows/temp.yml
   DOCKER_FILE: ./Dockerfile
   BUILD_CONTEXT_PATH: ./
-  NAMESPACE: namespace-workflow-1785658615895
+  NAMESPACE: namespace-workflow-1786258416691
   ENABLENAMESPACECREATION: false
   AUTH_TYPE: SERVICE_PRINCIPAL
 
@@ -70,18 +71,15 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           auth-type: ${{ env.AUTH_TYPE }}
 
-          
-      - name: Log in to Azure Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ${{ secrets.ACR_LOGIN_SERVER }}
-          username: ${{ secrets.ACR_USERNAME }}
-          password: ${{ secrets.ACR_PASSWORD }}
       # Logs into ACR
+      - name: Log into ACR
+        run: |
+          az acr login -n ${{ env.AZURE_CONTAINER_REGISTRY }}
+
+      # Builds and pushes an image up to your Azure Container Registry
       - name: Build and push image to ACR
         run: |
-          docker build -t containerregistrytemp.azurecr.io/image-workflow-1785658615895:${{ github.sha }} -f ./Dockerfile .
-          docker push containerregistrytemp.azurecr.io/image-workflow-1785658615895:${{ github.sha }}
+          az acr build --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.ACR_RESOURCE_GROUP }} -f ${{ env.DOCKER_FILE }} ${{ env.BUILD_CONTEXT_PATH }}
   deploy:
     permissions:
       actions: read
