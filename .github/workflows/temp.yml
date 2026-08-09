@@ -39,7 +39,7 @@ on:
 
 env:
   ACR_RESOURCE_GROUP: RGJenishSakhiya
-  AZURE_CONTAINER_REGISTRY: kuberclusterregistry
+  AZURE_CONTAINER_REGISTRY: KuberClusterregistry
   CONTAINER_NAME: image-workflow-1786258416691
   CLUSTER_NAME: KuberCluster
   CLUSTER_RESOURCE_GROUP: KuberCluster_group
