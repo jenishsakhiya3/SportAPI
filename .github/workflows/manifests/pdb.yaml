@@ -1,13 +1,13 @@
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: temp
+  name: temp1
   labels:
-    app.kubernetes.io/name: temp
-    app.kubernetes.io/part-of: temp-project
+    app.kubernetes.io/name: temp1
+    app.kubernetes.io/part-of: temp1-project
     kubernetes.azure.com/generator: devhub
 spec:
   maxUnavailable: 1
   selector:
     matchLabels:
-      app: temp
+      app: temp1
