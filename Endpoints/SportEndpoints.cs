@@ -13,6 +13,8 @@ public static class SportEndpoints
     {
         var api = app.MapGroup("/api");
 
+
+        
         // 1. GET /api/sports (Delay: 50ms)
         api.MapGet("/sports", async (SportDbContext db) =>
         {
