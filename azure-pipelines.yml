@@ -1,5 +1,8 @@
 # Disable running automatically on direct commits
-trigger: none
+trigger:
+  branches:
+    include:
+      - sport-api
 
 # Define PR trigger targeting master
 pr:
