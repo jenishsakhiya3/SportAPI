@@ -1,10 +1,8 @@
-# Disable running automatically on direct commits
 trigger:
   branches:
     include:
       - sport-api
 
-# Define PR trigger targeting master
 pr:
   branches:
     include:
@@ -14,70 +12,41 @@ pool:
   vmImage: 'windows-latest'
 
 steps:
-  # 1. Check out source code with full history for accurate Sonar analysis
-  - checkout: self
-    fetchDepth: 0
 
-  - powershell: |
-      # Read the branch reference safely from the environment variable
-      $fullBranch = $env:PR_SOURCE_BRANCH
-      
-      # Strip 'refs/heads/' prefix (e.g., 'refs/heads/Temp' -> 'Temp')
-      $branchName = $fullBranch -replace '^refs/heads/', ''
-      
-      Write-Host "Targeting source branch: $branchName"
-      
-      # Fetch the source branch ref and switch to it
-      git fetch origin "${fullBranch}:${branchName}"
-      git checkout $branchName
-    displayName: 'Checkout PR Source Branch'
-    condition: eq(variables['Build.Reason'], 'PullRequest')
-    env:
-      PR_SOURCE_BRANCH: $(System.PullRequest.SourceBranch)
+- checkout: self
+  fetchDepth: 0
 
-  # 2. Install .NET SDK
-  - task: UseDotNet@2
-    displayName: 'Install .NET Core SDK'
-    inputs:
-      version: '8.x'
+- task: UseDotNet@2
+  displayName: 'Install .NET SDK'
+  inputs:
+    version: '8.x'
 
-  # 3. SonarQube Prepare (Must execute before build)
-  - task: SonarQubePrepare@8
-    displayName: 'Prepare SonarQube Analysis'
-    inputs:
-      SonarQube: 'SonarTemp'
-      scannerMode: 'dotnet'
-      projectKey: 'Self_testing-app-service_6ab9bf25-b969-4844-bcbb-33ed10e44d55'
+- task: SonarQubePrepare@8
+  displayName: 'Prepare SonarQube Analysis'
+  inputs:
+    SonarQube: 'SonarTemp'
+    scannerMode: 'dotnet'
+    projectKey: 'Self_testing-app-service_6ab9bf25-b969-4844-bcbb-33ed10e44d55'
 
-  # Workaround for SonarQube Community Edition
-  - powershell: |
-      $params = "$env:SONARQUBE_SCANNER_PARAMS" -replace '"sonar.branch.name":"[\w,/,-]*"\,?'
-      Write-Host "##vso[task.setvariable variable=SONARQUBE_SCANNER_PARAMS]$params"
-    displayName: 'Remove Branch Parameter for Community Edition'
+- task: DotNetCoreCLI@2
+  displayName: 'Restore NuGet Packages'
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
 
-  # 4. Restore NuGet Packages
-  - task: DotNetCoreCLI@2
-    displayName: 'Restore NuGet Packages'
-    inputs:
-      command: 'restore'
-      projects: '**/*.csproj'
+- task: DotNetCoreCLI@2
+  displayName: 'Build Application'
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--configuration Release --no-restore'
 
-  # 5. Build Application
-  - task: DotNetCoreCLI@2
-    displayName: 'Build Application'
-    inputs:
-      command: 'build'
-      projects: '**/*.csproj'
-      arguments: '--configuration Release --no-restore'
+- task: SonarQubeAnalyze@8
+  displayName: 'Run SonarQube Analysis'
+  inputs:
+    jdkversion: 'JAVA_HOME_21_X64'
 
-  # 6. Run SonarQube Analysis
-  - task: SonarQubeAnalyze@8
-    displayName: 'Run Code Analysis'
-    inputs:
-      jdkversion: 'JAVA_HOME_21_X64'
-
-  # 7. Publish Quality Gate Result (Fails if timeout exceeds 300s)
-  - task: SonarQubePublish@8
-    displayName: 'Publish Quality Gate Result'
-    inputs:
-      pollingTimeoutSec: '300'
+- task: SonarQubePublish@8
+  displayName: 'Publish Quality Gate Result'
+  inputs:
+    pollingTimeoutSec: '300'
