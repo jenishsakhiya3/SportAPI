@@ -11,6 +11,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 // Register CORS service to allow cross-origin requests from Angular frontend
 builder.Services.AddCors(options =>
 {
