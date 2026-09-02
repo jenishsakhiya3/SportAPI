@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Azure.Storage.Blobs;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace SportAPI.Endpoints;
 
@@ -340,6 +341,35 @@ public static class SportEndpoints
                 );
             }
         }).WithName("CheckStorageAccess");
+
+        // 22. GET /api/auth/validate (Validates MSAL token without touching the database)
+        api.MapGet("/auth/validate", (ClaimsPrincipal user) =>
+        {
+            var name = user.Identity?.Name 
+                       ?? user.FindFirst("name")?.Value 
+                       ?? user.FindFirst("preferred_username")?.Value;
+            var email = user.FindFirst("email")?.Value 
+                        ?? user.FindFirst("preferred_username")?.Value 
+                        ?? user.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
+            var oid = user.FindFirst("oid")?.Value 
+                      ?? user.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value;
+            var tenantId = user.FindFirst("tid")?.Value 
+                           ?? user.FindFirst("http://schemas.microsoft.com/identity/claims/tenantid")?.Value;
+
+            return Results.Ok(new
+            {
+                Success = true,
+                Message = "Token is valid and authenticated successfully!",
+                User = new
+                {
+                    Name = name,
+                    Email = email,
+                    ObjectId = oid,
+                    TenantId = tenantId
+                },
+                Claims = user.Claims.Select(c => new { c.Type, c.Value })
+            });
+        }).WithName("ValidateToken");
     }
 }
 
