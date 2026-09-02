@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - sportapi-appservice
+name: Build and deploy ASP.Net Core app to Azure Web App - SportAPI
 
 on:
   push:
@@ -51,15 +51,15 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_EEB1573000EA4BF5BFC8A424A6891833 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_179107B39D9F42D080289523E385362D }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_90523913344F45BF874BE6B5EDE9B77D }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_68D132899FA2467A837B8EB560D22090 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F2DBBD0551E94610937F476E90AFB786 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_EB657487A142421590CD5464A73C6597 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'sportapi-appservice'
-          slot-name: 'dev'
+          app-name: 'SportAPI'
+          slot-name: 'Production'
           package: .
           

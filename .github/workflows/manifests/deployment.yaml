@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temp1
+  labels:
+    app.kubernetes.io/name: temp1
+    kubernetes.azure.com/generator: devhub
+  namespace: sample-app-namespace-1786336060083
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: temp1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: temp1
+    spec:
+      containers:
+        - name: temp1
+          image: ContainerRegistryTemp.azurecr.io/image-workflow-1786336060064:7a13cb6a72d4265159de9f4b1bffb3123fa5f6b7
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: "0.5"
+              memory: "0.5Gi"
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+          envFrom:
+            - configMapRef:
+                name: temp1-config
+            - secretRef:
+                name: secret-ref
+                optional: true
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 1
+            successThreshold: 1
+            initialDelaySeconds: 3
+          startupProbe:
+            tcpSocket:
+              port: 8080
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+            successThreshold: 1
+            initialDelaySeconds: 0
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - SETPCAP
+                - MKNOD
+                - AUDIT_WRITE
+                - CHOWN
+                - DAC_OVERRIDE
+                - FOWNER
+                - FSETID
+                - KILL
+                - SETGID
+                - SETUID
+                - NET_BIND_SERVICE
+                - SYS_CHROOT
+                - SETFCAP
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: temp1
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: temp1

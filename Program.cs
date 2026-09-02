@@ -15,6 +15,7 @@ builder.Services.AddSwaggerWithJwtAuth();
 // Register MSAL Token Authentication and Authorization
 builder.Services.AddSportAuthentication(builder.Configuration);
 
+
 // Register CORS service to allow cross-origin requests from Angular frontend
 builder.Services.AddCors(options =>
 {

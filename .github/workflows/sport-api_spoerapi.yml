@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - sport-api
+name: Build and deploy ASP.Net Core app to Azure Web App - SpoerAPI
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     permissions:
       contents: read #This is required for actions/checkout
 
@@ -27,7 +27,7 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -36,7 +36,7 @@ jobs:
           path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     needs: build
     permissions:
       id-token: write #This is required for requesting the JWT
@@ -51,15 +51,15 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D26113D640744F2692F3EAB7B2D0D67E }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_24F55C09957840EEACD5062C7ABC3B05 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_6FB150B1D1AD4844BB32B5B573D3D314 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_BFC3C41E16ED431E9CF2465ED8195868 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9D95ECCBBE48438EB0B623484D30259F }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_11F8D4B5C96448B5AFBA1C0D410E8D54 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'sport-api'
+          app-name: 'SpoerAPI'
           slot-name: 'Production'
           package: .
           
