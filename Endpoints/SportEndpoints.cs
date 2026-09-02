@@ -11,7 +11,7 @@ public static class SportEndpoints
 {
     public static void MapSportEndpoints(this IEndpointRouteBuilder app)
     {
-        var api = app.MapGroup("/api");
+        var api = app.MapGroup("/api").RequireAuthorization();
 
         // 1. GET /api/sports (Delay: 50ms)
         api.MapGet("/sports", async (SportDbContext db) =>

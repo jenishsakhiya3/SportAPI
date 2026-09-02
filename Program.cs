@@ -1,4 +1,5 @@
 using Azure.Storage.Blobs;
+using SportAPI;
 using SportAPI.Data;
 using SportAPI.Endpoints;
 
@@ -7,9 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddOpenApi();
 
-// Register Swagger generation services
+// Register Swagger generation services with JWT support
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerWithJwtAuth();
+
+// Register MSAL Token Authentication and Authorization
+builder.Services.AddSportAuthentication(builder.Configuration);
 
 // Register CORS service to allow cross-origin requests from Angular frontend
 builder.Services.AddCors(options =>
@@ -48,6 +52,10 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseHttpsRedirection();
+
+// Enable Authentication & Authorization middleware
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Map our 20 Sport API endpoints
 app.MapSportEndpoints();
