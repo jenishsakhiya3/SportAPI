@@ -16,16 +16,18 @@ public static class AuthenticationExtensions
 
         var authority = $"{instance.TrimEnd('/')}/{tenantId}/v2.0";
 
-        var validAudiences = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var validAudiences = new List<string>();
         if (!string.IsNullOrWhiteSpace(clientId))
         {
             validAudiences.Add(clientId);
             validAudiences.Add($"api://{clientId}");
         }
-        if (!string.IsNullOrWhiteSpace(audience))
+        if (!string.IsNullOrWhiteSpace(audience) && !validAudiences.Contains(audience, StringComparer.OrdinalIgnoreCase))
         {
             validAudiences.Add(audience);
         }
+
+        var shouldValidateAudience = validAudiences.Count > 0;
 
         services.AddAuthentication(options =>
         {
@@ -38,13 +40,15 @@ public static class AuthenticationExtensions
 
             options.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuer = !string.Equals(tenantId, "common", StringComparison.OrdinalIgnoreCase) &&
+                ValidateIssuer = !string.IsNullOrWhiteSpace(tenantId) &&
+                                 !string.Equals(tenantId, "common", StringComparison.OrdinalIgnoreCase) &&
                                  !string.Equals(tenantId, "organizations", StringComparison.OrdinalIgnoreCase),
-                ValidIssuer = !string.Equals(tenantId, "common", StringComparison.OrdinalIgnoreCase) &&
+                ValidIssuer = !string.IsNullOrWhiteSpace(tenantId) &&
+                              !string.Equals(tenantId, "common", StringComparison.OrdinalIgnoreCase) &&
                               !string.Equals(tenantId, "organizations", StringComparison.OrdinalIgnoreCase)
                               ? authority : null,
-                ValidateAudience = validAudiences.Count > 0,
-                ValidAudiences = validAudiences.ToList(),
+                ValidateAudience = shouldValidateAudience,
+                ValidAudiences = shouldValidateAudience ? validAudiences : null,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true
             };
@@ -58,9 +62,13 @@ public static class AuthenticationExtensions
                     if (context.Request.Query.TryGetValue("token", out var tokenValue) ||
                         context.Request.Query.TryGetValue("access_token", out tokenValue))
                     {
-                        var token = tokenValue.ToString();
+                        var token = tokenValue.ToString().Trim();
                         if (!string.IsNullOrWhiteSpace(token))
                         {
+                            if (token.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                            {
+                                token = token["Bearer ".Length..].Trim();
+                            }
                             context.Token = token;
                         }
                     }
