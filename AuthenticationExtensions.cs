@@ -7,48 +7,52 @@ namespace SportAPI;
 
 public static class AuthenticationExtensions
 {
-    public static IServiceCollection AddSportAuthentication(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                // Simple & Easy Token Validation (validates token format, lifetime/expiry, and extracts claims)
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = false,             // Accepts token from your tenant without issuer mismatch
-                    ValidateAudience = false,           // Accepts ID tokens & Access tokens without audience errors
-                    ValidateLifetime = true,           // Checks that token is not expired
-                    ValidateIssuerSigningKey = false,  // Flexible signing key validation
-                    SignatureValidator = (token, parameters) => new JwtSecurityToken(token)
-                };
+    public static IServiceCollection AddSportAuthentication(this IServiceCollection services, IConfiguration configuration){
+    // 1. Read values dynamically from Azure App Service Environment Variables
+    var tenantId = configuration["TenantId"];
+    var backendClientId = configuration["BackendClientId"];
 
-                // Read token from URL query string (?token=... or ?access_token=...) or Authorization header
-                options.Events = new JwtBearerEvents
+    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            // 2. Set the Authority using the TenantId environment variable
+            options.Authority = $"https://login.microsoftonline.com/{tenantId}/v2.0";
+
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidAudience = backendClientId,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true
+            };
+
+            // Read token from URL query string or Authorization header
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
                 {
-                    OnMessageReceived = context =>
+                    if (context.Request.Query.TryGetValue("token", out var tokenValue) ||
+                        context.Request.Query.TryGetValue("access_token", out tokenValue))
                     {
-                        if (context.Request.Query.TryGetValue("token", out var tokenValue) ||
-                            context.Request.Query.TryGetValue("access_token", out tokenValue))
+                        var token = tokenValue.ToString().Trim();
+                        if (!string.IsNullOrWhiteSpace(token))
                         {
-                            var token = tokenValue.ToString().Trim();
-                            if (!string.IsNullOrWhiteSpace(token))
+                            if (token.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
                             {
-                                if (token.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
-                                {
-                                    token = token["Bearer ".Length..].Trim();
-                                }
-                                context.Token = token;
+                                token = token["Bearer ".Length..].Trim();
                             }
+                            context.Token = token;
                         }
-                        return Task.CompletedTask;
                     }
-                };
-            });
+                    return Task.CompletedTask;
+                }
+            };
+        });
 
         services.AddAuthorization();
         return services;
-    }
-
+    }   
     public static IServiceCollection AddSwaggerWithJwtAuth(this IServiceCollection services)
     {
         services.AddSwaggerGen(c =>
