@@ -22,6 +22,11 @@ public static class AuthenticationExtensions
             {
                 ValidateIssuer = true,
                 ValidateAudience = true,
+                ValidIssuers = new[]
+                {
+                    $"https://login.microsoftonline.com/{tenantId}/v2.0",
+                    $"https://sts.windows.net/{tenantId}/"
+                },
                 ValidAudience = backendClientId,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true
