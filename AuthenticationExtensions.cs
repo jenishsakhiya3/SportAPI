@@ -12,6 +12,9 @@ public static class AuthenticationExtensions
     var tenantId = configuration["TenantId"];
     var backendClientId = configuration["BackendClientId"];
 
+    Console.WriteLine("tenantId" + tenantId);
+    Console.WriteLine("backendClientId" + backendClientId);
+
     services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
