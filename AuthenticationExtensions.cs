@@ -23,10 +23,11 @@ public static class AuthenticationExtensions
                 ValidateIssuer = true,
                 ValidIssuers = new[]
                 {
-                    "https://login.microsoftonline.com/db85f625-db9c-40ca-9289-4dbbaa596f22/v2.0",
-                    "https://sts.windows.net/db85f625-db9c-40ca-9289-4dbbaa596f22/"
+                    "https://login.microsoftonline.com/66c5be6d-b895-4170-9fe4-1d29253008f0/v2.0",
+                    "https://sts.windows.net/66c5be6d-b895-4170-9fe4-1d29253008f0/"
                 },
-                ValidateAudience = false,
+                ValidateAudience = true,
+                ValidAudience = backendClientId,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true
             };
@@ -56,7 +57,7 @@ public static class AuthenticationExtensions
 
         services.AddAuthorization();
         return services;
-    }   
+    }    
     public static IServiceCollection AddSwaggerWithJwtAuth(this IServiceCollection services)
     {
         services.AddSwaggerGen(c =>
