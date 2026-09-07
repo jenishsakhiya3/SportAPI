@@ -23,8 +23,8 @@ public static class AuthenticationExtensions
                 ValidateIssuer = true,
                 ValidIssuers = new[]
                 {
-                    "https://login.microsoftonline.com/66c5be6d-b895-4170-9fe4-1d29253008f0/v2.0",
-                    "https://sts.windows.net/66c5be6d-b895-4170-9fe4-1d29253008f0/"
+                    "https://login.microsoftonline.com/db85f625-db9c-40ca-9289-4dbbaa596f22/v2.0",
+                    "https://sts.windows.net/db85f625-db9c-40ca-9289-4dbbaa596f22/"
                 },
                 ValidateAudience = false,
                 ValidateLifetime = true,
