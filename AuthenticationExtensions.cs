@@ -21,6 +21,11 @@ public static class AuthenticationExtensions
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
+                ValidIssuers = new[]
+                {
+                    "https://login.microsoftonline.com/66c5be6d-b895-4170-9fe4-1d29253008f0/v2.0",
+                    "https://sts.windows.net/66c5be6d-b895-4170-9fe4-1d29253008f0/"
+                },
                 ValidateAudience = true,
                 ValidAudience = backendClientId,
                 ValidateLifetime = true,
