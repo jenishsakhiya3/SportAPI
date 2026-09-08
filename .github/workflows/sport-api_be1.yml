@@ -63,6 +63,13 @@ jobs:
           slot-name: 'Production'
           package: .
 
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_2922DCB3FBB8406F9DE3AA74B39E1D54 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_AE39B87DCD4E498693746A1C8F35371D }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E25B26B1F5D84B3EBC34DAEBE7C0BA3A }}
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp2
         uses: azure/webapps-deploy@v3
