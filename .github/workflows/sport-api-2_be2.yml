@@ -59,7 +59,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'BE2'
+          app-name: 'be2-dueyb6defahgewef'
           slot-name: 'Production'
           package: .
           
