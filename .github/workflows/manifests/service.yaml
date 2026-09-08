@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: temp1
+  namespace: sample-app-namespace-1786336060083
+  labels:
+    app.kubernetes.io/name: temp1
+    kubernetes.azure.com/generator: devhub
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: temp1
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080

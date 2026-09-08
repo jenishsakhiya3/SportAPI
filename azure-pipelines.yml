@@ -1,0 +1,52 @@
+trigger:
+  branches:
+    include:
+      - sport-api
+
+pr:
+  branches:
+    include:
+      - sport-api
+
+pool:
+  vmImage: 'windows-latest'
+
+steps:
+
+- checkout: self
+  fetchDepth: 0
+
+- task: UseDotNet@2
+  displayName: 'Install .NET SDK'
+  inputs:
+    version: '10.x'
+
+- task: SonarQubePrepare@8
+  displayName: 'Prepare SonarQube Analysis'
+  inputs:
+    SonarQube: 'SonarTemp'
+    scannerMode: 'dotnet'
+    projectKey: 'Self_testing-app-service_6ab9bf25-b969-4844-bcbb-33ed10e44d55'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restore NuGet Packages'
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build Application'
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--configuration Release --no-restore'
+
+- task: SonarQubeAnalyze@8
+  displayName: 'Run SonarQube Analysis'
+  inputs:
+    jdkversion: 'JAVA_HOME_21_X64'
+
+- task: SonarQubePublish@8
+  displayName: 'Publish Quality Gate Result'
+  inputs:
+    pollingTimeoutSec: '300'
