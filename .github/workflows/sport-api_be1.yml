@@ -62,4 +62,12 @@ jobs:
           app-name: 'BE1'
           slot-name: 'Production'
           package: .
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'BE2'
+          slot-name: 'Production'
+          package: .
           
