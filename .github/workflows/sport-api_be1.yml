@@ -56,7 +56,7 @@ jobs:
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_9C79CF8A1E2B479B81AF114169E459E7 }}
 
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
+        id: deploy-to-webapp1
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'BE1'
@@ -64,7 +64,7 @@ jobs:
           package: .
 
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
+        id: deploy-to-webapp2
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'BE2'
